@@ -5,6 +5,7 @@ var ScoreManager = require('scoreManager');
 var DialogManager = require('dialogManager');
 var TimeManager = require('timeManager');
 var MusicManager = require('musicManager');
+var InfoManager = require('infoManager');
 
 
 cc.Class({
@@ -16,13 +17,15 @@ cc.Class({
         scoreMng: ScoreManager,
         dialogMng: DialogManager,
         timeMng: TimeManager,
-        musicMng: MusicManager
+        musicMng: MusicManager,
+        infoMng: InfoManager
     },
 
     onLoad: function () {
         this.materialScale = 0.3125;
-        this.moveDuration = 0.6;
-        this.recoveryTime = 2;
+        this.moveDuration = 0.4;
+        this.recoveryTime = 0.5;
+        this.prob = 0.6;
         this.doAction = false;
         this.planeMng.init(this);
         this.tilesMng.init(this);
@@ -30,6 +33,7 @@ cc.Class({
         this.dialogMng.init(this);
         this.timeMng.init(this);
         this.musicMng.init(this);
+        this.infoMng.init(this);
         //this.gameOver();
         this.switchGameStatus(GameStatus.SHOWSTARTBTN);
     },
@@ -42,19 +46,19 @@ cc.Class({
         this._gameStatus = status;
         switch (status) {
             case GameStatus.SHOWSTARTBTN:
-                cc.log('SHOWSTARTBTN');
+                console.log('SHOWSTARTBTN');
                 this.startGame();
                 break;            
             case GameStatus.PLAYING: // 游戏开始，开始计时
-                cc.log('PLAYING');
+                console.log('PLAYING');
                 // this.timeMng.oneSchedule();
                 break;
             case GameStatus.GAMEOVER:
-                cc.log('GAMEOVER');
+                console.log('GAMEOVER');
                 this.switchGameStatus(GameStatus.DIALOG);
                 break;
             case GameStatus.DIALOG:
-                cc.log('DIALOG');
+                console.log('DIALOG');
                 break;
             default:
                 break;
@@ -72,6 +76,7 @@ cc.Class({
     gameOver: function () {
         this.switchGameStatus(GameStatus.GAMEOVER);
         this.timeMng.stopCounting();
+        this.infoMng.updateScore();
         this.dialogMng.showRestart();
     }, 
 

@@ -11,15 +11,11 @@ cc.Class({
 
     init: function (game) {
         this.game = game;
+        this.initDialog();
     },
     initDialog: function() {
-        console.log("fuck")
         this.initRestartDialog();
-                console.log("fuck")
-
         this.initRankDialog();
-                console.log("fuck")
-
     },
 
     initRestartDialog: function () {
@@ -36,12 +32,12 @@ cc.Class({
     },
 
     showRestart: function() {
-        this.initRestartDialog();
+        //this.initRestartDialog();
         this._restartDialog.show();
     },
 
     showRank: function () {
-        this.initRankDialog();
+        //this.initRankDialog();
         this._rankDialog.show();
     },
 

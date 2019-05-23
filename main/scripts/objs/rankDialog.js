@@ -15,15 +15,14 @@ cc.Class({
         rank: cc.Label,
         icon: cc.Node,
         nickname: cc.Label,
-        score: cc.Label
+        score: cc.Label,
+        display: cc.Sprite
     },
 
     init: function (game) {
         this.game = game;
         this.maxLen = 5;
         this.node.opacity = 0;
-        this.setName('我是小可爱');
-        this.setIcon();
     },
 
     addTouchEvent: function () {
@@ -48,7 +47,6 @@ cc.Class({
     },
     touchShareEvent (event) {
         console.log("touch share");
-
         var dialog = this.node.parent.getComponent('rankDialog')
         if(dialog.game.getGameState() !== GameStatus.DIALOG){
             return;
@@ -59,6 +57,7 @@ cc.Class({
         this.rank.string = rank;
     },
     setName: function(name) {
+        console.log("setName", name)
         this.nickname.string = name;
     },
     setScore: function(score) {
@@ -99,9 +98,15 @@ cc.Class({
     },
     setIcon: function(icon) {
         var sprite = this.icon.getComponent(cc.Sprite);
-        var frame = "bomb";
-        cc.loader.loadRes(frame, cc.SpriteFrame, function (err, spriteFrame) {
+        cc.loader.loadRes(icon, cc.SpriteFrame, function (err, spriteFrame) {
             sprite.spriteFrame = spriteFrame;
+        });
+    },
+    setIconUrl: function(iconUrl) {
+        console.log("iconUrl", iconUrl);
+        var sprite = this.icon.getComponent(cc.Sprite);
+        cc.loader.load({url: iconUrl, type: 'jpeg'}, function (err, tex) {
+            sprite.spriteFrame.setTexture(tex);
         });
     },
     setIcons: function(icons) {
@@ -154,17 +159,33 @@ cc.Class({
         this.setName(name);
     },
 
+    showRank: function () {
+        var openDataContext = wx.getOpenDataContext();
+        var sharedCanvas = openDataContext.canvas;
+        var tex = new cc.Texture2D();
+        tex.initWithElement(sharedCanvas);
+        tex.handleLoadedTexture();
+        var w = sharedCanvas.width;
+        var h = Math.floor(w * 330 / 490);
+        var x = 0;
+        var y = sharedCanvas.height - h;
+        var rect = new cc.Rect(x, y, w, h);
+        this.display.spriteFrame = new cc.SpriteFrame(tex, rect);
+    },
+
     show: function () {
+        //this.game.infoMng.getFriendScore();
         this.addTouchEvent();
         this.node.zIndex = 120;
-        this.node.x = cc.view.getFrameSize().width;// - 512 / 2;
-        this.node.y = cc.view.getFrameSize().height;// - 512 / 2;
+        this.node.x = 375 - 256;  // TODO: why 375
+        this.node.y = cc.view.getFrameSize().height - 256;  // TODO: not center
         this.node.opacity = 255;
         this.updateScore();
-        this.setRanks([1,2,3]);
-        this.setNames(['尊贵的小可爱','勇敢的小可爱','谦虚的小可爱']);
-        this.setScores([213,190,23]);
-        this.setIcons(['bomb', 'bomb', 'bomb']);
+        this.setRanks([1, 2, 3, 4, 5]);
+        this.setNames(['尊贵的小可爱','英勇的小可爱','谦虚的小可爱','平静的小可爱','迷茫的小可爱']);
+        this.setScores([2000, 1000, 500, 200, 100]);
+        this.setIcons(['bomb', 'bomb', 'bomb', 'bomb', 'bomb']);
+        this.showRank();
     },
 
     dismiss: function () {

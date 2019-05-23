@@ -129,7 +129,7 @@ cc.Class({
         }
         this.game.tilesMng.moveTileHorizontal(this, moveStep);
         this.game.tilesMng.refresh();
-        this.game.tilesMng.addLine();
+        this.game.tilesMng.spawnLines();
     },
 
     colorTile: function() {
@@ -163,12 +163,12 @@ cc.Class({
 
     placeTile: function() {
         var posY = this.game.planeMng.planePosition.y + this.game.materialScale * 32 * (8 * (this.item._row + 0.5) + (this.item._row + 1));
-        var posX = this.game.planeMng.planePosition.x + this.game.materialScale * 32 * (8 * (this.item._col + this.item._length / 2 ) + (this.item._col + (this.item._length+ 1) / 2));
+        var posX = this.game.planeMng.planePosition.x + this.game.materialScale * 32 * (8 * (this.item._col + this.item._length / 2 ) + (this.item._col + (this.item._length + 1) / 2));
         // console.log("tile pos:", this.item._col, this.item._row, this.item._length, posX, posY);
         this.node.setPosition(cc.v2(posX, posY));
     },
 
     print: function () {
-        cc.log('uuid ' + this.node.uuid + ' id ' + this.item._id + ' pos[' + this.item._row + '][' + this.item._col + '] color [' + this.item._color + '] length [' + this.item._length + '] opacity [' + this.node.opacity + ']');
+        console.log('uuid ' + this.node.uuid + ' id ' + this.item._id + ' pos[' + this.item._row + '][' + this.item._col + '] position [' + this.node.getPosition() + '] color [' + this.item._color + '] length [' + this.item._length + '] opacity [' + this.node.opacity + ']');
     }
 });

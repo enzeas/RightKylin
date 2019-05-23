@@ -7,7 +7,7 @@ cc.Class({
     properties: {
         rankButton: cc.Node,
         colorTile: cc.Prefab,
-        planeSize: new cc.Vec2(8, 8),  // need NEW
+        planeSize: new cc.Vec2(8, 8),
         planePosition: new cc.Vec2(0, 0),
         plane: GamePlane
     },
@@ -27,10 +27,6 @@ cc.Class({
     },
     touchRankEvent (event) {
         var plane = this.node.parent.getComponent('gamePlane');
-        //if(manager.game.getGameState() !== GameStatus.DIALOG){
-        //    return;
-        //}
-        console.log(plane)
         plane.game.showRank();
     },
 
@@ -79,19 +75,18 @@ cc.Class({
 
     flushPlane: function () {
         // 初始化游戏面板大小
-        // TODO: how to get this size ?
-        var size = 2.5 * 292;
-        this.planePosition.x = cc.view.getFrameSize().width - size / 2;
-        this.planePosition.y = cc.view.getFrameSize().height - size / 2;
-        console.log("plane pos:", this.planePosition.x, this.planePosition.y)
-        this.plane.setPlaneSize(size, size);
-        // console.log(this.planeSize.x, this.planeSize.y)
+        console.log(this.game)
+        var size = cc.view.getFrameSize().width * 730 / 750;
+        this.planePosition.x = cc.view.getFrameSize().width - size;
+        this.planePosition.y = cc.view.getFrameSize().height - size;
+        this.plane.setPlanePos(this.planePosition.x, this.planePosition.y);
         // TODO: move this out
         this.game.tilesMng.node.removeAllChildren();
         this.initTmpTile();
         this.game.tilesMng.initMap(this.planeSize.x, this.planeSize.y);
         this.game.dialogMng.initDialog();
-        this.game.scoreMng.init();
+        this.game.scoreMng.initScore();
+        this.game.infoMng.initInfo();
     }
 
 });

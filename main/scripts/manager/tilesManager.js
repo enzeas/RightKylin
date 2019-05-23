@@ -19,7 +19,7 @@ cc.Class({
         this.rawLines = [];
         this._raw = raw;
         this._col = col;
-        this.generateProb();
+        this.generateProb(this.game.prob);
         for(var y = 0; y < raw; y++) {
             var arr = [];
             var uarr = [];
@@ -39,7 +39,7 @@ cc.Class({
             this.tileUuids.push(uarr);
             this.rawLines.push(line);
         }
-        this.addLine();
+        this.spawnLines();
         //this.test();
     },
 
@@ -84,14 +84,11 @@ cc.Class({
         this.refresh();
     },
 
-    generateProb: function() {
-        // TODO: increase by time
-        var p = 0.6
+    generateProb: function(p) {
         var q = 1 - p;
         this.prob = p;
         this.probArray = [p * p * p, 3 * p * p * q, 3 * p * q * q, q * q * q]
         this.cumulativeProb = [0, this.probArray[0], this.probArray[0]+ this.probArray[1], 1 - this.probArray[3], 1]
-        // console.log(this.cumulativeProb)
     },
 
     enableTouch: function() {
@@ -150,7 +147,6 @@ cc.Class({
                 var pY = this.rawLines[y][x] % 10;
                 var step = this.calTileFallStep(pX, pY);
                 if (step) {
-                    //console.log("calTileFallStep:", pX, pY, this.rawLines[y][x], this.tileItems[y][x].item._length, step)
                     this.moveTileDownByPosStep(pX, pY, step);
                     return true;
                 }
@@ -245,8 +241,6 @@ cc.Class({
     },
 
     moveTileHorizontal: function(colorTile, moveStep) {
-        //console.log("moveTileHorizontal:", this.rawLines);
-        //colorTile.print();
         var x = colorTile.item._col;
         var y = colorTile.item._row;
         var len = colorTile.item._length;
@@ -257,7 +251,6 @@ cc.Class({
         targetTile.addTouchEvent();
         colorTile.setInvisible();
         colorTile.delTouchEvent();
-        //targetTile.print();
         var id = colorTile.item._id;
         var new_id = colorTile.item._id + moveStep * 10;
         for (var y = 0; y < this.rawLines.length; ++y) {
@@ -277,7 +270,6 @@ cc.Class({
                 }
             }
         }
-        //console.log("After move Tile:", this.rawLines);
     },
     // TODO: check data boundary
     moveTileUpByPos: function (x, y, step) {
@@ -339,12 +331,16 @@ cc.Class({
 
     spawnNewTile: function(x, y, len, color) {
         var tile = this.tileItems[y][x];
-        tile.setTileColor(color);
+        // tile.setTileColor(color);
         tile.setTileLength(len);
-        tile.setVisible(); 
         tile.addTouchEvent();
-        //var action = cc.fadeIn(this.moveDuration);
-        //tile.node.runAction(action);
+        // tile.setVisible();
+        var action = cc.fadeIn(this.moveDuration);
+        tile.node.runAction(action);
+    },
+
+    spawnLines: function () {
+        this.addLine();
     },
 
     addLine: function () {
@@ -354,31 +350,15 @@ cc.Class({
             return;
         }
         if (this.lineCount() < 2) {
-            //this.spawnNewLine(); // TODO: fix animiation bug
+            this.spawnTwoLine();
+        } else {
+            this.spawnOneLine();
         }
-        this.spawnNewLine();
         this.refresh();
         console.log("After AddLine:", this.rawLines);
-        // console.log("lineCount:", this.lineCount());
     },
 
-    spawnNewLine: function() {
-        // console.log("BSpawnNewLine:",this.rawLines);
-        // move all upper
-        for (var y = this.rawLines.length - 2; y >= 0; y--) { // top to bottom
-            for (var x = 0; x < this.rawLines[y].length; x++) {
-                if (this.rawLines[y][x] >= 0 && this.tileItems[y][x].visible()) {
-                    this.moveTileUpByPos(x, y, 1);
-                }
-            }
-        }
-        // clear bottom
-        for (var x = 0; x < this.rawLines[0].length; x++) {
-            this.rawLines[0][x] = -this.magicNum;
-            this.tileItems[0][x].setInvisible();
-            this.tileItems[0][x].delTouchEvent();
-        }
-        // console.log("After move SpawnNewLine:",this.rawLines);
+    generateTileLine: function(y) {
         var arr = [];
         var infoArr = []
         var sumLen = 0;
@@ -395,11 +375,10 @@ cc.Class({
         }
         arr[arr.length-1] += maxLen - sumLen;
         var hidePos = Math.floor(Math.random() * arr.length);
-        //console.log(arr, sumLen, hidePos);
         var pos = 0;
         for (var x = 0; x < arr.length; x++) {
             if (x != hidePos) {
-                this.spawnNewTile(pos, 0, arr[x], Math.floor(Math.random()*6));
+                this.spawnNewTile(pos, y, arr[x], Math.floor(Math.random()*6));
                 for (var i = pos; i < pos + arr[x]; i++) {
                     infoArr[i] = 10 * pos;
                 }
@@ -410,6 +389,55 @@ cc.Class({
             }
             pos += arr[x];
         }
+        return infoArr;
+    },
+
+    spawnTwoLine: function() {
+        // move all upper
+        for (var y = this.rawLines.length - 3; y >= 0; y--) { // top to bottom
+            for (var x = 0; x < this.rawLines[y].length; x++) {
+                if (this.rawLines[y][x] >= 0 && this.tileItems[y][x].visible()) {
+                    this.moveTileUpByPos(x, y, 2);
+                }
+            }
+        }
+        // clear bottom
+        for (var x = 0; x < this.rawLines[0].length; x++) {
+            this.rawLines[0][x] = -this.magicNum;
+            this.tileItems[0][x].setInvisible();
+            this.tileItems[0][x].delTouchEvent();
+        }
+        for (var x = 0; x < this.rawLines[1].length; x++) {
+            this.rawLines[1][x] = -this.magicNum;
+            this.tileItems[1][x].setInvisible();
+            this.tileItems[1][x].delTouchEvent();
+        }
+        var infoArr = this.generateTileLine(0);
+        for (var x = 0; x < this.rawLines[0].length; x++) {
+            this.rawLines[0][x] = infoArr[x];
+        }
+        var infoArr = this.generateTileLine(1);
+        for (var x = 0; x < this.rawLines[1].length; x++) {
+            this.rawLines[1][x] = infoArr[x] + 1;
+        }
+    },
+
+    spawnOneLine: function() {
+        // move all upper
+        for (var y = this.rawLines.length - 2; y >= 0; y--) { // top to bottom
+            for (var x = 0; x < this.rawLines[y].length; x++) {
+                if (this.rawLines[y][x] >= 0 && this.tileItems[y][x].visible()) {
+                    this.moveTileUpByPos(x, y, 1);
+                }
+            }
+        }
+        // clear bottom
+        for (var x = 0; x < this.rawLines[0].length; x++) {
+            this.rawLines[0][x] = -this.magicNum;
+            this.tileItems[0][x].setInvisible();
+            this.tileItems[0][x].delTouchEvent();
+        }
+        var infoArr = this.generateTileLine(0);
         for (var x = 0; x < this.rawLines[0].length; x++) {
             this.rawLines[0][x] = infoArr[x];
         }

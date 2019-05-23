@@ -63,8 +63,8 @@ cc.Class({
         //console.log("dialog.show")
         this.addTouchEvent();
         this.node.zIndex = 120;
-        this.node.x = cc.view.getFrameSize().width;// - 512 / 2;
-        this.node.y = cc.view.getFrameSize().height;// - 512 / 2;
+        this.node.x = 375 - 256;  // TODO: why 375
+        this.node.y = cc.view.getFrameSize().height - 256;  // TODO: not center
         this.node.opacity = 255;
     },
 
