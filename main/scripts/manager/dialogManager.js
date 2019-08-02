@@ -32,12 +32,10 @@ cc.Class({
     },
 
     showRestart: function() {
-        //this.initRestartDialog();
         this._restartDialog.show();
     },
 
     showRank: function () {
-        //this.initRankDialog();
         this._rankDialog.show();
     },
 

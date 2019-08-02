@@ -39,11 +39,11 @@ cc.Class({
     },
 
     _updateParam: function () {
-        if (this.game.moveDuration > 0.1) {
-            this.game.moveDuration = 0.4 - 0.01 * this._level;
+        if (this.game.moveDuration > this.game.minMoveDuration) {
+            this.game.moveDuration = this.game.initMoveDuration - this.game.moveDurationDecayRate * this._level;
         }
-        if (this.game.prob > 0.01) {
-            this.game.prob = 0.6 - 0.005 * this._level;
+        if (this.game.prob > this.game.minProb) {
+            this.game.prob = this.game.initProb - this.game.probDecayRate * this._level;
             this.game.tilesMng.generateProb(this.game.prob);
         }
     }

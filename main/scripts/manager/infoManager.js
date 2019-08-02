@@ -13,13 +13,22 @@ cc.Class({
         this.getFriendScore();
     },
 
-    updateScoreNew: function() {
+    uploadScoreNew: function() {
         window.wx.postMessage({
             messageType: 0,
             score: this.game.scoreMng._score
         });
     },
-    updateScore: function () {
+    
+    getFriendScore: function() {
+        window.wx.postMessage({
+            messageType: 1,
+            messageDetail: "fuck"
+        });
+    },
+
+    uploadScore: function () {
+        // TODO: delete these 
         var score = this.game.scoreMng._score.toString();  // IMPORTANT
         var name = this._userInfo.nickName;
         var icon = this._userInfo.avatarUrl;
@@ -34,14 +43,6 @@ cc.Class({
             },
         });
     }, 
-
-    getFriendScore: function() {
-        window.wx.postMessage({
-            messageType: 1,
-            messageDetail: "fuck"
-        });
-    },
-
 
     setInfo: function(userInfo) {
         this._userInfo = userInfo;

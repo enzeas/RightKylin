@@ -22,11 +22,19 @@ cc.Class({
     },
 
     onLoad: function () {
+        // config
         this.materialScale = 0.3125;
-        this.moveDuration = 0.4;
         this.recoveryTime = 0.5;
-        this.prob = 0.6;
+        this.initMoveDuration = 0.5;
+        this.minMoveDuration = 0.1;
+        this.moveDuration = this.initMoveDuration;
+        this.moveDurationDecayRate = 0.01;
+        this.initProb = 0.6;
+        this.minProb = 0.01;
+        this.prob = this.initProb;
+        this.probDecayRate = 0.005;
         this.doAction = false;
+        // init
         this.planeMng.init(this);
         this.tilesMng.init(this);
         this.scoreMng.init(this);
@@ -66,7 +74,6 @@ cc.Class({
     },
 
     startGame: function () {
-        // 显示开始按钮，关闭图层，激活当前节点事件监听
         this.planeMng.flushPlane();
         this.scoreMng.setScore(0);
         this.timeMng.startCounting();
@@ -75,8 +82,9 @@ cc.Class({
 
     gameOver: function () {
         this.switchGameStatus(GameStatus.GAMEOVER);
+        this.tilesMng.hideAllTiles();
         this.timeMng.stopCounting();
-        this.infoMng.updateScore();
+        this.infoMng.uploadScoreNew();
         this.dialogMng.showRestart();
     }, 
 

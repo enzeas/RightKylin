@@ -73,7 +73,8 @@ cc.Class({
         console.log("fetch group friend data");
     },
     setRankInfo: function (friendData) {
-        var defaultUrl = "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83ep6Qck9h29Me243wTHonhzHDKQ9wd1FN6AnqBDhUYwBJnOrpaoQlWvia0IoRJH37DAF2tWQbWcQFNg/132";
+        //var defaultUrl = "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83ep6Qck9h29Me243wTHonhzHDKQ9wd1FN6AnqBDhUYwBJnOrpaoQlWvia0IoRJH37DAF2tWQbWcQFNg/132";
+        var defaultUrl = "";
         var rankInfo = [{"name": "尊贵的小可爱", "icon": defaultUrl, "score": 2000},
                         {"name": "英勇的小可爱", "icon": defaultUrl, "score": 1000},
                         {"name": "谦虚的小可爱", "icon": defaultUrl, "score": 500},
@@ -90,26 +91,30 @@ cc.Class({
             _names[i].getComponent(cc.Label).string = rankInfo[i].name;
             _scores[i].getComponent(cc.Label).string = rankInfo[i].score;
         }
-        var icon0 = this.icon.children[0].getComponent(cc.Sprite);
-        cc.loader.load({url: rankInfo[0].icon, type: 'jpeg'}, function (err, tex) {
-            icon0.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(tex);
-        });
-        var icon1 = this.icon.children[1].getComponent(cc.Sprite);
-        cc.loader.load({url: rankInfo[1].icon, type: 'jpeg'}, function (err, tex) {
-            icon1.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(tex);
-        });
-        var icon2 = this.icon.children[2].getComponent(cc.Sprite);
-        cc.loader.load({url: rankInfo[2].icon, type: 'jpeg'}, function (err, tex) {
-            icon2.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(tex);
-        });
-        var icon3 = this.icon.children[3].getComponent(cc.Sprite);
-        cc.loader.load({url: rankInfo[3].icon, type: 'jpeg'}, function (err, tex) {
-            icon3.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(tex);
-        });
-        var icon4 = this.icon.children[4].getComponent(cc.Sprite);
-        cc.loader.load({url: rankInfo[4].icon, type: 'jpeg'}, function (err, tex) {
-            icon4.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(tex);
-        });
-
+        try {
+            var icon0 = this.icon.children[0].getComponent(cc.Sprite);
+            cc.loader.load({url: rankInfo[0].icon, type: 'jpeg'}, function (err, tex) {
+                icon0.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(tex);
+            });
+            var icon1 = this.icon.children[1].getComponent(cc.Sprite);
+            cc.loader.load({url: rankInfo[1].icon, type: 'jpeg'}, function (err, tex) {
+                icon1.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(tex);
+            });
+            var icon2 = this.icon.children[2].getComponent(cc.Sprite);
+            cc.loader.load({url: rankInfo[2].icon, type: 'jpeg'}, function (err, tex) {
+                icon2.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(tex);
+            });
+            var icon3 = this.icon.children[3].getComponent(cc.Sprite);
+            cc.loader.load({url: rankInfo[3].icon, type: 'jpeg'}, function (err, tex) {
+                icon3.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(tex);
+            });
+            var icon4 = this.icon.children[4].getComponent(cc.Sprite);
+            cc.loader.load({url: rankInfo[4].icon, type: 'jpeg'}, function (err, tex) {
+                icon4.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(tex);
+            });
+        } catch (err) {
+            console.log(err);
+        }
+        
     }
 });
