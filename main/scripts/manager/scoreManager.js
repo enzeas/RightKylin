@@ -7,6 +7,7 @@ cc.Class({
 
     init: function (game) {
         this.game = game;
+        this._adScore = 500;
         this.initScore();
     },
     initScore: function() {
@@ -31,6 +32,13 @@ cc.Class({
         this._score += score;
         this._updateScore();
         this._updateParam();
+        this._showAd();
+    },
+
+    _showAd: function() {
+        if (this._score > this._adScore && !this.game.adMng.adShowing) {
+            this.game.adMng.showBottomBannerAd();
+        }
     },
 
     _updateScore: function () {

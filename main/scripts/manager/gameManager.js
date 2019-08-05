@@ -6,6 +6,7 @@ var DialogManager = require('dialogManager');
 var TimeManager = require('timeManager');
 var MusicManager = require('musicManager');
 var InfoManager = require('infoManager');
+var AdManager = require('adManager');
 
 
 cc.Class({
@@ -18,7 +19,8 @@ cc.Class({
         dialogMng: DialogManager,
         timeMng: TimeManager,
         musicMng: MusicManager,
-        infoMng: InfoManager
+        infoMng: InfoManager,
+        adMng: AdManager
     },
 
     onLoad: function () {
@@ -42,7 +44,7 @@ cc.Class({
         this.timeMng.init(this);
         this.musicMng.init(this);
         this.infoMng.init(this);
-        //this.gameOver();
+        this.adMng.init(this);
         this.switchGameStatus(GameStatus.SHOWSTARTBTN);
     },
 

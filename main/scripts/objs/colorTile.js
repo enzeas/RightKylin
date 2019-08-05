@@ -162,8 +162,11 @@ cc.Class({
     },
 
     placeTile: function() {
-        var posY = this.game.planeMng.planePosition.y + this.game.materialScale * 32 * (8 * (this.item._row + 0.5) + (this.item._row + 1));
-        var posX = this.game.planeMng.planePosition.x + this.game.materialScale * 32 * (8 * (this.item._col + this.item._length / 2 ) + (this.item._col + (this.item._length + 1) / 2));
+        //var posY = this.game.planeMng.planePosition.y + this.game.materialScale * 32 * (8 * (this.item._row + 0.5) + (this.item._row + 1));
+        //var posX = this.game.planeMng.planePosition.x + this.game.materialScale * 32 * (8 * (this.item._col + this.item._length / 2 ) + (this.item._col + (this.item._length + 1) / 2));
+        var posY = this.game.planeMng.planePosition.y - 375 + this.game.materialScale * 32 * (1 + 8 * (this.item._row + 0.5) + (this.item._row + 1));
+        var posX = this.game.materialScale * 32 * (1 + 8 * (this.item._col + this.item._length / 2 ) + (this.item._col + (this.item._length + 1) / 2));
+        
         // console.log("tile pos:", this.item._col, this.item._row, this.item._length, posX, posY);
         this.node.setPosition(cc.v2(posX, posY));
     },

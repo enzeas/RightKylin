@@ -20,7 +20,7 @@ cc.Class({
 
     init: function (game) {
         this.game = game;
-        this.node.opacity = 0;
+        this.node.opacity = 256;
     },
 
     addTouchEvent: function () {
@@ -62,10 +62,12 @@ cc.Class({
     show: function () {
         //console.log("dialog.show")
         this.addTouchEvent();
-        this.node.zIndex = 120;
-        this.node.x = 375 - 256;  // TODO: why 375
-        this.node.y = cc.view.getFrameSize().height - 256;  // TODO: not center
+        this.node.zIndex = 120;        
+        this.node.x = 375;
+        this.node.y = cc.view.getFrameSize().height / cc.view.getFrameSize().width * 375;
         this.node.opacity = 255;
+        this.game.adMng.hideBottomBannerAd();
+        this.game.adMng.showRestartDialogBannerAd();
     },
 
     dismiss: function () {
@@ -73,6 +75,7 @@ cc.Class({
         this.delTouchEvent();
         this.node.zIndex = 0;
         this.node.opacity = 0;
+        this.game.adMng.hideRestartDialogBannerAd();
         // this._doEndAnim();
     },
     moreLife: function () {
@@ -82,25 +85,5 @@ cc.Class({
             this.game.scoreMng.setScore(score);
             this.game.scoreMng.setLife(0);
         }, this.game.recoveryTime);
-    },
-
-    _doStartAnim: function () {/*
-        if(Utils.shouldRender()){
-            // 进行锚点坐标转换
-            this.plane.scale = 0.8;
-            var scaleBig = cc.scaleTo(0.5, 1, 1);
-            this.plane.runAction(scaleBig.easing(cc.easeElasticOut(0)));
-        }
-    */},
-
-    _doEndAnim: function () {/*
-        if(Utils.shouldRender()){
-            var fadeOut = cc.fadeOut(0.1);
-            var func = cc.callFunc(()=>this.node.active = false);
-            this.node.runAction(cc.sequence(fadeOut, func));
-        } else{
-            this.node.active = false;
-        }
-    */},
-
+    }
 });

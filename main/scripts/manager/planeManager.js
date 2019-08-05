@@ -5,7 +5,11 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        musicButton: cc.Node,
         rankButton: cc.Node,
+        settingButton: cc.Node,
+        discussButton: cc.Node,
+        serviceButton: cc.Node,
         colorTile: cc.Prefab,
         planeSize: new cc.Vec2(8, 8),
         planePosition: new cc.Vec2(0, 0),
@@ -19,16 +23,65 @@ cc.Class({
         this._moveL = 0;
         this._moveR = 0;
         this.addTouchEvent();
+        this.addWechatButton();
+    },
+    addWechatButton: function () {
+        console.log(cc.view.getFrameSize().width, cc.view.getFrameSize().height);
+        var size = 64 / 750 * cc.view.getFrameSize().width;
+        var clubTop = (cc.view.getFrameSize().height - cc.view.getFrameSize().width) / 2 - size;
+        var clubLeft = cc.view.getFrameSize().width / 2 + 208 / 750 * cc.view.getFrameSize().width;
+        console.log(clubLeft, clubTop, size);
+        let clubButton = wx.createGameClubButton({
+            type: 'text',
+            text: ' ',
+            style: {
+                left: clubLeft,
+                top: clubTop,
+                width: size,
+                height: size
+            }
+        })
     },
 
     addTouchEvent: function () {
+        var music = this.musicButton.getComponent(cc.Sprite);
+        music.node.on(cc.Node.EventType.TOUCH_END, this.touchMusicEvent, music);
         var rank = this.rankButton.getComponent(cc.Sprite);
         rank.node.on(cc.Node.EventType.TOUCH_END, this.touchRankEvent, rank);
+        var setting = this.settingButton.getComponent(cc.Sprite);
+        setting.node.on(cc.Node.EventType.TOUCH_END, this.touchSettingEvent, setting);
+        var discuss = this.discussButton.getComponent(cc.Sprite);
+        //discuss.node.on(cc.Node.EventType.TOUCH_END, this.touchDiscussEvent, discuss);
+        var service = this.serviceButton.getComponent(cc.Sprite);
+        service.node.on(cc.Node.EventType.TOUCH_END, this.touchServiceEvent, service);
+    },
+    touchMusicEvent (event) {
+        var plane = this.node.parent.getComponent('gamePlane');
+        plane.game.musicMng.switchMusic();
+        if (plane.game.musicMng.play) {
+            this.node.opacity = 255;
+        } else {
+            this.node.opacity = 128;
+        }
     },
     touchRankEvent (event) {
         var plane = this.node.parent.getComponent('gamePlane');
         plane.game.showRank();
     },
+    touchSettingEvent (event) {
+        var plane = this.node.parent.getComponent('gamePlane');
+        //plane.game.gameOver();
+        console.log("touchSettingEvent")
+    },
+    touchDiscussEvent (event) {
+        console.log("touchDiscussEvent")
+    },
+    touchServiceEvent (event) {
+        console.log("touchServiceEvent")
+        var test;
+        wx.openCustomerServiceConversation(test);
+    },
+    
 
     initTmpTile: function() {
         var newTile = cc.instantiate(this.colorTile);
@@ -76,9 +129,8 @@ cc.Class({
     flushPlane: function () {
         // 初始化游戏面板大小
         console.log(this.game)
-        var size = cc.view.getFrameSize().width * 730 / 750;
-        this.planePosition.x = cc.view.getFrameSize().width - size;
-        this.planePosition.y = cc.view.getFrameSize().height - size;
+        this.planePosition.x = 375;
+        this.planePosition.y = 375 * cc.view.getFrameSize().height / cc.view.getFrameSize().width;
         this.plane.setPlanePos(this.planePosition.x, this.planePosition.y);
         // TODO: move this out
         this.game.tilesMng.node.removeAllChildren();
