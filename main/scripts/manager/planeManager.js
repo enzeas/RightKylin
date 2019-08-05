@@ -25,6 +25,7 @@ cc.Class({
         this.addTouchEvent();
         this.addWechatButton();
     },
+
     addWechatButton: function () {
         console.log(cc.view.getFrameSize().width, cc.view.getFrameSize().height);
         var size = 64 / 750 * cc.view.getFrameSize().width;
@@ -50,10 +51,9 @@ cc.Class({
         rank.node.on(cc.Node.EventType.TOUCH_END, this.touchRankEvent, rank);
         var setting = this.settingButton.getComponent(cc.Sprite);
         setting.node.on(cc.Node.EventType.TOUCH_END, this.touchSettingEvent, setting);
-        var discuss = this.discussButton.getComponent(cc.Sprite);
-        //discuss.node.on(cc.Node.EventType.TOUCH_END, this.touchDiscussEvent, discuss);
         var service = this.serviceButton.getComponent(cc.Sprite);
         service.node.on(cc.Node.EventType.TOUCH_END, this.touchServiceEvent, service);
+        this.addWechatButton();
     },
     touchMusicEvent (event) {
         var plane = this.node.parent.getComponent('gamePlane');
@@ -70,18 +70,13 @@ cc.Class({
     },
     touchSettingEvent (event) {
         var plane = this.node.parent.getComponent('gamePlane');
-        //plane.game.gameOver();
-        console.log("touchSettingEvent")
-    },
-    touchDiscussEvent (event) {
-        console.log("touchDiscussEvent")
+        //plane.game.adMng.showVideoAd();
+        plane.game.showSetting();
     },
     touchServiceEvent (event) {
-        console.log("touchServiceEvent")
         var test;
         wx.openCustomerServiceConversation(test);
     },
-    
 
     initTmpTile: function() {
         var newTile = cc.instantiate(this.colorTile);

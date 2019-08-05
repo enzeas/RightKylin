@@ -4,14 +4,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        color_l: {
-            default: null,
-            type: cc.Node
-        },
-        color_r: {
-            default: null,
-            type: cc.Node
-        },
     },
 
     init: function (game) {
@@ -30,6 +22,7 @@ cc.Class({
         };
         this.node.opacity = 0;
         this.setMovable(false, 0, 0);
+        this.loadSkin();
     },
     addTouchEvent: function () {
         this.node.on(cc.Node.EventType.TOUCH_START, this.touchStartEvent, this);
@@ -85,7 +78,7 @@ cc.Class({
     },
     setTileColor: function (color) {
         this.item._color = color;
-        this.colorTile();
+        this.drawTile();
     },
     setId: function (id) {
         this.item._id = id;
@@ -106,7 +99,6 @@ cc.Class({
     },
     setVisible: function() {
         this.node.opacity = 255;
-        this.colorTile();
         this.drawTile();
         this.placeTile();
     },
@@ -132,41 +124,35 @@ cc.Class({
         this.game.tilesMng.spawnLines();
     },
 
-    colorTile: function() {
-        var spriteM = this.getComponent(cc.Sprite);
-        var spriteL = this.color_l.getComponent(cc.Sprite);
-        var spriteR = this.color_r.getComponent(cc.Sprite);
-        var color = this.colorList[this.item._color];
-        var frameM = "colors/color_" + color + "_m";
-        var frameL = "colors/color_" + color + "_l";
-        var frameR = "colors/color_" + color + "_r";
-        cc.loader.loadRes(frameM, cc.SpriteFrame, function (err, spriteFrame) {  // IMPORTANT
-            spriteM.spriteFrame = spriteFrame;
-        });
-        cc.loader.loadRes(frameL, cc.SpriteFrame, function (err, spriteFrame) {
-            spriteL.spriteFrame = spriteFrame;
-        });
-        cc.loader.loadRes(frameR, cc.SpriteFrame, function (err, spriteFrame) {
-            spriteR.spriteFrame = spriteFrame;
+    loadSkin: function () {
+        var sprite = this.getComponent(cc.Sprite);
+        sprite.spriteFrame = sprite.spriteFrame.clone();  // IMPORTANT
+    },
+
+    changeSkin: function(skinName) {
+        var sprite = this.getComponent(cc.Sprite);
+        var startArr = [0, 128, 400, 816];
+        var self = this;
+        cc.loader.loadRes(skinName, cc.SpriteFrame, function (err, spriteFrame) {  // IMPORTANT
+            sprite.spriteFrame = spriteFrame.clone();
+            sprite.spriteFrame.setRect(new cc.Rect(startArr[self.item._length - 1], self.item._color * 128, 16 * (9 * self.item._length - 1), 128));
         });
     },
 
     drawTile: function () {
-        var midWidth = 32 * (9 * this.item._length - 7);
-        this.getComponent(cc.Sprite).sizeMode = cc.Sprite.SizeMode.CUSTOM;  // IMPORTANT
+        var sprite = this.getComponent(cc.Sprite);
+        var midWidth = 32 * (9 * this.item._length - 1);
+        var startArr = [0, 128, 400, 816];
+        var rect = new cc.Rect(startArr[this.item._length-1], this.item._color * 128, midWidth/2, 128);
+        sprite.spriteFrame.setRect(rect);
+        sprite.sizeMode = cc.Sprite.SizeMode.CUSTOM;  // IMPORTANT
         this.node.width = midWidth;
         this.node.scale = this.game.materialScale;
-        this.color_l.x = - 48 - midWidth / 2;
-        this.color_r.x =   48 + midWidth / 2;
-        //console.log("after cal:", this.node.width, this.color_l.x, this.color_l.width, this.color_r.x, this.color_r.width)
     },
 
     placeTile: function() {
-        //var posY = this.game.planeMng.planePosition.y + this.game.materialScale * 32 * (8 * (this.item._row + 0.5) + (this.item._row + 1));
-        //var posX = this.game.planeMng.planePosition.x + this.game.materialScale * 32 * (8 * (this.item._col + this.item._length / 2 ) + (this.item._col + (this.item._length + 1) / 2));
         var posY = this.game.planeMng.planePosition.y - 375 + this.game.materialScale * 32 * (1 + 8 * (this.item._row + 0.5) + (this.item._row + 1));
         var posX = this.game.materialScale * 32 * (1 + 8 * (this.item._col + this.item._length / 2 ) + (this.item._col + (this.item._length + 1) / 2));
-        
         // console.log("tile pos:", this.item._col, this.item._row, this.item._length, posX, posY);
         this.node.setPosition(cc.v2(posX, posY));
     },

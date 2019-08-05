@@ -88,11 +88,17 @@ cc.Class({
         this.timeMng.stopCounting();
         this.infoMng.uploadScoreNew();
         this.dialogMng.showRestart();
-    }, 
+    },
 
     showRank: function() {
         this.switchGameStatus(GameStatus.DIALOG);
         this.timeMng.stopCounting();
         this.dialogMng.showRank();
-    }
+    },
+
+    showSetting: function() {
+        this.switchGameStatus(GameStatus.DIALOG);
+        this.timeMng.stopCounting();
+        this.dialogMng.showSetting();
+    },
 });

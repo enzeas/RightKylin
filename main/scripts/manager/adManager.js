@@ -15,6 +15,7 @@ cc.Class({
         this.restartOOB = false;
         this.initBottomBannerAd();
         this.initRestartDialogBannerAd();
+        this.initVideoAd();
     },
     initBottomBannerAd: function() {
         var adWidth = 450;
@@ -99,7 +100,7 @@ cc.Class({
         this.restartDialogBannerAd = bannerAd;
     },
 
-    showRestartDialogBannerAd: function(life) {
+    showRestartDialogBannerAd: function() {
         if (!this.restartOOB) {
             this.adShowing = true;
             this.restartDialogBannerAd.show();
@@ -108,5 +109,31 @@ cc.Class({
     hideRestartDialogBannerAd: function() {
         this.adShowing = false;
         this.restartDialogBannerAd.hide();
-    }
+    },
+
+    initVideoAd: function() {
+        var videoAd = wx.createRewardedVideoAd({
+            adUnitId: 'adunit-128e78f1e4293c3c'
+        })
+        var self = this;
+        videoAd.onLoad(() => {
+            console.log('激励视频 广告加载成功')
+        })
+        videoAd.show().then(() => console.log('激励视频 广告显示'))
+        videoAd.onError(err => console.log(err))
+        videoAd.onClose(res => {
+            if (res && res.isEnded || res === undefined) {
+                self.game.scoreMng.revive();
+                console.log("videoAd finish")
+            } else {
+                self.game.scoreMng.restart();
+                console.log("videoAd not finish");
+            }
+        })
+        this.videoAd = videoAd;
+    },
+    showVideoAd: function() {
+        console.log("show videoAd")
+        this.videoAd.show();
+    },
 });

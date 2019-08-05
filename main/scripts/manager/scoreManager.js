@@ -1,3 +1,5 @@
+var GameStatus = require('gameStatus');
+
 cc.Class({
     extends: cc.Component,
 
@@ -33,6 +35,16 @@ cc.Class({
         this._updateScore();
         this._updateParam();
         this._showAd();
+    },
+
+    revive: function (score) {
+        var score = this._score;
+        this.game.switchGameStatus(GameStatus.SHOWSTARTBTN);
+        this.game.scoreMng.setScore(score);
+        this.game.scoreMng.setLife(0);
+    },
+    restart: function (score) {
+        this.game.switchGameStatus(GameStatus.SHOWSTARTBTN);
     },
 
     _showAd: function() {

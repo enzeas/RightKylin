@@ -104,6 +104,7 @@ cc.Class({
             }
         }
     },
+
     disableTouch: function() {
         console.log("disableTouch")
         for (var y = 0; y < this.tileItems.length; y++) {
@@ -111,6 +112,15 @@ cc.Class({
                 if (this.tileItems[y][x].visible()) {
                     this.tileItems[y][x].delTouchEvent();
                 }
+            }
+        }
+    },
+
+    changeSkin: function(skinName) {
+        console.log("changeSkin");
+        for (var y = 0; y < this.tileItems.length; y++) {
+            for (var x = 0; x < this.tileItems[y].length; x++) {
+                this.tileItems[y][x].changeSkin(skinName);
             }
         }
     },
