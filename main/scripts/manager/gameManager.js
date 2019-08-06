@@ -86,7 +86,7 @@ cc.Class({
         this.switchGameStatus(GameStatus.GAMEOVER);
         this.tilesMng.hideAllTiles();
         this.timeMng.stopCounting();
-        this.infoMng.uploadScoreNew();
+        this.infoMng.uploadScore();
         this.dialogMng.showRestart();
     },
 

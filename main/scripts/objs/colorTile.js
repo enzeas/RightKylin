@@ -8,14 +8,12 @@ cc.Class({
 
     init: function (game) {
         this.game = game;
-        this.game = game;
-        this.colorList = "bcoprv";
         this.item = {
             id: -1,
             row: -1,  // 位置（行）y
             col: -1,  // 位置（列）x
             length: 1,  // 长度
-            color: 0,  // 颜色
+            g: 0,  // 颜色
             moveL: 0,  // 能够向左移动的距离
             moveR: 0,  // 能够向右移动的距离
             movable: false

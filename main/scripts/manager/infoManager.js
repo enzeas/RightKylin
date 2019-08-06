@@ -13,7 +13,7 @@ cc.Class({
         this.getFriendScore();
     },
 
-    uploadScoreNew: function() {
+    uploadScore: function() {
         window.wx.postMessage({
             messageType: 0,
             score: this.game.scoreMng._score
@@ -27,28 +27,11 @@ cc.Class({
         });
     },
 
-    uploadScore: function () {
-        // TODO: delete these 
-        var score = this.game.scoreMng._score.toString();  // IMPORTANT
-        var name = this._userInfo.nickName;
-        var icon = this._userInfo.avatarUrl;
-        var data = [{"key": "score", "value": score}, {"key": "username", "value": name}, {"key": "icon", "value": icon}];
-        window.wx.setUserCloudStorage({
-            "KVDataList": data,
-            "success": function() {
-                console.log("update score", score);
-            },
-            "fail": function() {
-                console.log("update score failed");
-            },
-        });
-    }, 
-
     setInfo: function(userInfo) {
         this._userInfo = userInfo;
         var rankDialog = this.game.dialogMng._rankDialog;
+        console.log("userInfo", userInfo);
         rankDialog.setName(userInfo.nickName);
-        console.log("icon:", userInfo.avatarUrl);
         rankDialog.setIconUrl(userInfo.avatarUrl);
     },
 
@@ -91,6 +74,6 @@ cc.Class({
                     });
                 }
             }
-         });
+        });
     }
 });

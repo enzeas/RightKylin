@@ -8,10 +8,13 @@ cc.Class({
         this.game = game;
     },
 
-    setPlaneSize: function (width, height) {
-        this.node.width = width;
-        this.node.height = height;
+    changeSkin: function (skinName) {
+        var sprite = this.getComponent(cc.Sprite);
+        cc.loader.loadRes(skinName, cc.SpriteFrame, function (err, spriteFrame) {  // IMPORTANT
+            sprite.spriteFrame = spriteFrame.clone();
+        });
     },
+
     setPlanePos: function (x, y) {
         this.node.x = x;
         this.node.y = y;

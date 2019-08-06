@@ -9,7 +9,6 @@ cc.Class({
         this.initAd();
     },
     initAd: function() {
-        console.log("ad init");
         this.adShowing = false;
         this.bottomOOB = false;
         this.restartOOB = false;
@@ -18,7 +17,7 @@ cc.Class({
         this.initVideoAd();
     },
     initBottomBannerAd: function() {
-        var adWidth = 450;
+        var adWidth = 300;
         var adDist = 25;
         var screenWidth = cc.view.getFrameSize().width;
         var adLeft = (screenWidth - adWidth) / 2;
@@ -38,10 +37,11 @@ cc.Class({
         })
         bannerAd.onLoad(() => {
             console.log('底部banner加载成功')
-            console.log(bannerAd.style)
+            //console.log(bannerAd.style)
         })
         bannerAd.onResize(res => {
             bannerAd.style.left = (screenWidth - bannerAd.style.realWidth) / 2;
+            bannerAd.style.top = screenHeight - bannerAd.style.realHeight;
             this.bottomOOB = false;
             if (bannerAd.style.realHeight + adDist > (screenHeight - screenWidth) / 2) {
                 this.bottomOOB = true;
@@ -84,7 +84,7 @@ cc.Class({
         })
         bannerAd.onLoad(() => {
             console.log('复活页banner加载成功')
-            console.log(bannerAd.style)
+            //console.log(bannerAd.style)
         })
         bannerAd.onResize(res => {
             bannerAd.style.left = (screenWidth - bannerAd.style.realWidth) / 2;

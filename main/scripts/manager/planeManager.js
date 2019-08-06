@@ -5,13 +5,13 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        background: cc.Node,
         musicButton: cc.Node,
         rankButton: cc.Node,
         settingButton: cc.Node,
         discussButton: cc.Node,
         serviceButton: cc.Node,
         colorTile: cc.Prefab,
-        planeSize: new cc.Vec2(8, 8),
         planePosition: new cc.Vec2(0, 0),
         plane: GamePlane
     },
@@ -23,15 +23,12 @@ cc.Class({
         this._moveL = 0;
         this._moveR = 0;
         this.addTouchEvent();
-        this.addWechatButton();
     },
 
     addWechatButton: function () {
-        console.log(cc.view.getFrameSize().width, cc.view.getFrameSize().height);
         var size = 64 / 750 * cc.view.getFrameSize().width;
         var clubTop = (cc.view.getFrameSize().height - cc.view.getFrameSize().width) / 2 - size;
         var clubLeft = cc.view.getFrameSize().width / 2 + 208 / 750 * cc.view.getFrameSize().width;
-        console.log(clubLeft, clubTop, size);
         let clubButton = wx.createGameClubButton({
             type: 'text',
             text: ' ',
@@ -70,7 +67,7 @@ cc.Class({
     },
     touchSettingEvent (event) {
         var plane = this.node.parent.getComponent('gamePlane');
-        //plane.game.adMng.showVideoAd();
+        //plane.game.planeMng.changeSkin("bg/bg_white");
         plane.game.showSetting();
     },
     touchServiceEvent (event) {
@@ -121,6 +118,13 @@ cc.Class({
         this.tile.setInvisible();
     },
 
+    changeSkin: function(skinName) {
+        var sprite = this.background.getComponent(cc.Sprite);
+        cc.loader.loadRes(skinName, cc.SpriteFrame, function (err, spriteFrame) {  // IMPORTANT
+            sprite.spriteFrame = spriteFrame.clone();
+        });
+    },
+
     flushPlane: function () {
         // 初始化游戏面板大小
         console.log(this.game)
@@ -128,9 +132,9 @@ cc.Class({
         this.planePosition.y = 375 * cc.view.getFrameSize().height / cc.view.getFrameSize().width;
         this.plane.setPlanePos(this.planePosition.x, this.planePosition.y);
         // TODO: move this out
-        this.game.tilesMng.node.removeAllChildren();
+        //this.game.tilesMng.node.removeAllChildren();
         this.initTmpTile();
-        this.game.tilesMng.initMap(this.planeSize.x, this.planeSize.y);
+        this.game.tilesMng.initMap();
         this.game.dialogMng.initDialog();
         this.game.scoreMng.initScore();
         this.game.infoMng.initInfo();

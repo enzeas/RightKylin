@@ -10,23 +10,22 @@ cc.Class({
 
     init: function (game) {
         this.game = game;
+        this._raw = 8;
+        this._col = 8;
         this.magicNum = 99;
         this.moveDuration = this.game.moveDuration;
+        this.initTiles();
     },
 
-    initMap: function(col, raw) {
-        console.log("initMap:", col, raw);
+    initTiles: function() {
         this.tileItems = [];
         this.tileUuids = [];
         this.rawLines = [];
-        this._raw = raw;
-        this._col = col;
-        this.generateProb(this.game.prob);
-        for(var y = 0; y < raw; y++) {
+        for(var y = 0; y < this._raw; y++) {
             var arr = [];
             var uarr = [];
             var line = []
-            for(var x = 0; x < col; x++) {
+            for(var x = 0; x < this._col; x++) {
                 var newTile = cc.instantiate(this.colorTile);
                 this.node.addChild(newTile, this.magicNum - x);
                 var tile = newTile.getComponent('colorTile');
@@ -41,6 +40,10 @@ cc.Class({
             this.tileUuids.push(uarr);
             this.rawLines.push(line);
         }
+    },
+
+    initMap: function() {
+        this.generateProb(this.game.prob);
         this.spawnLines();
         //this.test();
     },
@@ -117,7 +120,6 @@ cc.Class({
     },
 
     changeSkin: function(skinName) {
-        console.log("changeSkin");
         for (var y = 0; y < this.tileItems.length; y++) {
             for (var x = 0; x < this.tileItems[y].length; x++) {
                 this.tileItems[y][x].changeSkin(skinName);

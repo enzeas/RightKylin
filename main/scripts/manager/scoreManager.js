@@ -18,6 +18,15 @@ cc.Class({
         this._level = 0;
     },
 
+    changeColor: function(colorName) {
+        if (colorName == "white") {
+            this.score.node.color = new cc.Color(255, 255, 255);
+        } else if (colorName == "black") {
+            this.score.node.color = new cc.Color(0, 0, 0);
+        }
+        console.log(this.score);
+    },
+
     setLife: function(life) {
         this._life = life;
     },
